@@ -45,7 +45,6 @@ public class Main implements BookOrderComands{
     public static void main(String[] args) throws IOException {
         String Line;
         String text = null;
-
         try{
             FileWriter writer = new FileWriter(filePathWriter);
             BufferedWriter bufferWriter = new BufferedWriter(writer);
@@ -55,16 +54,17 @@ public class Main implements BookOrderComands{
             System.err.println("Error if file cleaning :" + e.getMessage());
         }
 
+
         try {
             list = new LinkedList<>();
             list.sort(Comparator.comparing(Main::getPrice));
+            FileReader in = new FileReader(filePathRead);
+            BufferedReader reader  = new BufferedReader(in);
+
 
             text = readFile(filePathRead);
 
             String s = "";
-
-            FileReader in = new FileReader(filePathRead);
-            BufferedReader reader  = new BufferedReader(in);
 
             while (reader.ready()) {
                 s += reader.readLine() + "\r\n";
