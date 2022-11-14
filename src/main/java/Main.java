@@ -1,11 +1,15 @@
+package main.java;
+
 import java.io.*;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
 public class Main implements BookOrderComands{
     static final String filePathRead = "input.txt";
     static final String filePathWriter = "output.txt";
+    static final String filePathWriter2 = "file.txt";
 
     private static Main obj = new Main('b',12,21);
     private static Main[] new_objects = new Main[200];
@@ -45,14 +49,40 @@ public class Main implements BookOrderComands{
     public static void main(String[] args) throws IOException {
         String Line;
         String text = null;
+
         try{
-            FileWriter writer = new FileWriter(filePathWriter);
+            FileWriter writer = new FileWriter(filePathWriter2);
             BufferedWriter bufferWriter = new BufferedWriter(writer);
             bufferWriter.write("");
+
             bufferWriter.close();
+            writer.close();
         }catch (Exception e){
             System.err.println("Error if file cleaning :" + e.getMessage());
         }
+
+        try{
+            FileWriter writer = new FileWriter(filePathRead);
+            BufferedWriter bufferWriter = new BufferedWriter(writer);
+            String s = "u,9,1,bid\n" +
+                    "u,11,5,ask\n" +
+                    "q,best_bid\n" +
+                    "u,10,2,bid\n" +
+                    "q,best_bid\n" +
+                    "o,sell,1\n" +
+                    "q,size,10\n" +
+                    "u,9,0,bid\n" +
+                    "u,11,0,ask";
+
+
+            bufferWriter.write(s);
+
+            bufferWriter.close();
+            writer.close();
+        }catch (Exception e){
+            System.err.println("Error create file :" + e.getMessage());
+        }
+
 
 
         try {
@@ -67,10 +97,10 @@ public class Main implements BookOrderComands{
             String s = "";
 
             while (reader.ready()) {
-                s += reader.readLine() + "\r\n";
+                s += (reader.readLine() + "\n");
             }
 
-            String[] res = s.split("\r\n");
+            String[] res = s.split("\n");
 
             for (int i = 0; i<res.length; i++) {
                 if (res[i].charAt(0) == 'q') {
@@ -83,10 +113,23 @@ public class Main implements BookOrderComands{
                     System.out.println("input error");
                 }
             }
+            reader.close();
             in.close();
+
         }catch (IOException e){
             System.out.println("Error : "  + e);
         }
+
+        ////////////////////////////////////////////////////////////////////////////
+
+
+        try(BufferedReader reader = new BufferedReader(new FileReader(filePathWriter2));
+            PrintWriter writer = new PrintWriter(filePathWriter)){
+            writer.print(reader.lines().collect(Collectors.joining("\n")));
+        }catch (IOException e){
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Override
@@ -141,10 +184,12 @@ public class Main implements BookOrderComands{
                 if (num == list.get(i).getPrice()) {
 
                     try{
-                        FileWriter writer = new FileWriter(filePathWriter, true);
+                        FileWriter writer = new FileWriter(filePathWriter2, true);
                         BufferedWriter bufferWriter = new BufferedWriter(writer);
-                        bufferWriter.write(list.get(i).getSize() + "\r\n");
+                        bufferWriter.write(list.get(i).getSize() + "\n");
+
                         bufferWriter.close();
+                        writer.close();
                     }catch (IOException e){
                         System.out.println("Error : " + e);
                     }
@@ -159,10 +204,13 @@ public class Main implements BookOrderComands{
             if (list.get(i).getType() == 'B') {
 
                 try{
-                    FileWriter writer = new FileWriter(filePathWriter, true);
+                    FileWriter writer = new FileWriter(filePathWriter2, true);
                     BufferedWriter bufferWriter = new BufferedWriter(writer);
-                    bufferWriter.write(list.get(i).getPrice() + "," + list.get(i).getSize() + "\r\n");
+                    bufferWriter.write(list.get(i).getPrice() + "," + list.get(i).getSize() + "\n");
+
+
                     bufferWriter.close();
+                    writer.close();
                 }catch (IOException e){
                     System.out.println("Error : " + e);
                 }
@@ -188,10 +236,14 @@ public class Main implements BookOrderComands{
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getType() == 'A') {
                 try{
-                    FileWriter writer = new FileWriter(filePathWriter, true);
+                    FileWriter writer = new FileWriter(filePathWriter2, true);
                     BufferedWriter bufferWriter = new BufferedWriter(writer);
-                    bufferWriter.write(list.get(i).getPrice() + "," + list.get(i).getSize() + "\r\n");
+                    bufferWriter.write(list.get(i).getPrice() + "," + list.get(i).getSize() + "\n");
+
+
                     bufferWriter.close();
+                    writer.close();
+
                 }catch (IOException e) {
                     System.out.println("Error : " + e);
                 }
